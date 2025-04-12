@@ -34,6 +34,14 @@ class HttpClient {
         }
       });
 
+      console.log("Event Tracking Response:", {
+        status: response.status,
+        statusText: response.statusText,
+        data: response.data,
+        headers: response.headers,
+        requestTime: new Date().toISOString()
+      });
+
       return {
         success: true,
         status: response.status,

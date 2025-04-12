@@ -3,10 +3,12 @@ const crypto = require("crypto");
 
 class EncryptionService {
   constructor(publicKey) {
+    console.log("Received public key:", publicKey);
     this.publicKey = new NodeRSA({ environment: "node" });
     const formattedKey = publicKey.includes("-----BEGIN RSA PUBLIC KEY-----")
       ? publicKey
       : `-----BEGIN RSA PUBLIC KEY-----\n${publicKey}\n-----END RSA PUBLIC KEY-----`;
+    console.log("Formatted key:", formattedKey);
     this.publicKey.importKey(formattedKey, "pkcs1-public-pem");
   }
 
@@ -51,18 +53,29 @@ class EncryptionService {
   encrypt(message) {
     try {
       const [aesKey, iv] = this.generateAesKeyAndIv();
+      console.log("Generated AES Key length:", aesKey.length);
+      console.log("Generated IV length:", iv.length);
 
       const encryptedMessage = this.encryptWithAes(aesKey, iv, message);
+      console.log("Encrypted message length:", encryptedMessage.length);
 
       const encryptedKey = this.rsaEncrypt(aesKey);
       const encryptedIv = this.rsaEncrypt(iv);
 
+      console.log("Encrypted key length:", encryptedKey.length);
+      console.log("Encrypted IV length:", encryptedIv.length);
 
       const result = {
         body: encryptedMessage,
         key: encryptedKey,
         iv: encryptedIv
       };
+
+      console.log("Final payload structure:", {
+        body_length: encryptedMessage.length,
+        key_length: encryptedKey.length,
+        iv_length: encryptedIv.length
+      });
 
       return result;
     } catch (error) {

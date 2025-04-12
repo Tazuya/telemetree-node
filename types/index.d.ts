@@ -122,7 +122,7 @@ declare module '@tonsolutions/telemetree-node' {
   export class TelemetreeClient {
     constructor(projectId: string, apiKey: string);
     initialize(): Promise<void>;
-    track(eventName: string, eventProperties?: EventProperties): Promise<TrackingResponse>;
+    track(user: TelegramUser, eventName: string, eventProperties?: EventProperties): Promise<TrackingResponse>;
     trackUpdate(updateData: TelegramUpdate): Promise<TrackingResponse | void>;
   }
 }

@@ -41,7 +41,6 @@ class EncryptionService {
     try {
       const messageObj =
         typeof message === "string" ? JSON.parse(message) : message;
-      console.log("Encryption input:", messageObj);
 
       if (!messageObj.telegram_id) {
         console.error("Missing telegram_id in message:", messageObj);
@@ -54,21 +53,14 @@ class EncryptionService {
         messageObj.telegram_id.toString(),
         messageStr
       );
-      console.log("Raw WASM encryption result:", result);
 
       let encryptedData;
       try {
         encryptedData = JSON.parse(result);
-        console.log("Parsed encryption data:", encryptedData);
       } catch (parseError) {
         console.error("Failed to parse WASM result:", parseError);
         throw new Error("WASM returned invalid JSON");
       }
-
-      // Log individual fields
-      console.log("body:", encryptedData.body);
-      console.log("key:", encryptedData.key);
-      console.log("iv:", encryptedData.iv);
 
       // Detailed validation
       const missingFields = [];
